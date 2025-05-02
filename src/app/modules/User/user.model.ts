@@ -26,11 +26,17 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user", "driver"],
+    enum: ["admin", "user"],
     default: "user",
   },
-  img: { type: String },
+  profilImage: { type: String },
   rating: { type: Number, default: 0 },
+});
+
+userSchema.post("save", function (doc, next) {
+  //   console.log(this, 'post hook : we will save data');
+  doc.password = "";
+  next();
 });
 
 export const User = mongoose.model<IUser>("User", userSchema);

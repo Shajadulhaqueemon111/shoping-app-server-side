@@ -10,7 +10,7 @@ const createUser = async (user: IUser) => {
   return await User.create(user);
 };
 
-const findUserById = async (userId: string) => {
+const getSingleUser = async (userId: string) => {
   return await User.findById(userId);
 };
 
@@ -34,7 +34,7 @@ const deleteUserById = async (userId: string) => {
 
 export const UserService = {
   createUser,
-  findUserById,
+  getSingleUser,
   getAllUsers,
   updateUserById,
   deleteUserById,

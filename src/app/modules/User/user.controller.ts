@@ -15,9 +15,9 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
-const findUserById = catchAsync(async (req, res) => {
+const getSingleUser = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await UserService.findUserById(id);
+  const result = await UserService.getSingleUser(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -58,13 +58,13 @@ const deleteUserById = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "User is deleted succesfully",
-    data: result && null,
+    data: result,
   });
 });
 
 export const UserController = {
   createUser,
-  findUserById,
+  getSingleUser,
   getAllUsers,
   updateUserById,
   deleteUserById,

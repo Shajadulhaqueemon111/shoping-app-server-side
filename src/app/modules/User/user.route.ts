@@ -13,19 +13,16 @@ import validateRequest from "../../middlewares/validateRequiest";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/create-user",
   // auth(USER_ROLE.admin),
   validateRequest(createUserValidationSchema),
   UserController.createUser
 );
 
-// router.get("/", auth(USER_ROLE.admin), UserController.getAllUsers);
-// router.get('/', UserController.getAllUsers);
-
 router.get(
   "/:id",
   // auth(USER_ROLE.admin, USER_ROLE.user),
-  UserController.findUserById
+  UserController.getSingleUser
 );
 
 router.patch(
@@ -36,6 +33,6 @@ router.patch(
 );
 
 // router.delete("/:id", auth(USER_ROLE.admin), UserController.deleteUserById);
-router.patch("/:id", UserController.deleteUserById);
+router.delete("/:id", UserController.deleteUserById);
 
 export const UserRoutes = router;
