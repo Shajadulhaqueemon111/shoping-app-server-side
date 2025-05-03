@@ -40,40 +40,41 @@ const deleteUserById = async (userId: string) => {
 };
 
 const createAdminIntoDB = async (password: string, payload: TAdmin) => {
-  const userData: Partial<IUser> = {};
-
-  userData.role = "admin";
-
-  userData.email = payload.email;
+  const userData: Partial<IUser> = {
+    role: "admin",
+    email: payload.email,
+    name: payload.name,
+  };
+  userData.password = password;
+  const session = await mongoose.startSession();
+  session.startTransaction(); // ✅ THIS IS MISSING
 
   try {
-    const session = await mongoose.startSession();
-    // create a user (transaction-1)
     const newUser = await User.create([userData], { session });
 
-    //create a admin
     if (!newUser.length) {
-      throw new AppError(httpStatus.BAD_REQUEST, "Failed to create admin");
+      throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user");
     }
-    // set id , _id as user
 
-    payload.user = newUser[0]._id; //reference _id
+    payload.user = newUser[0]._id;
 
-    // create a admin (transaction-2)
     const newAdmin = await Admin.create([payload], { session });
 
     if (!newAdmin.length) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create admin");
     }
 
-    await (await session).commitTransaction();
-    await (await session).endSession();
+    await session.commitTransaction(); // ✅ COMMIT
+    session.endSession();
 
-    return newAdmin;
-  } catch (err: any) {
-    throw new Error(err);
+    return newAdmin[0]; // return the created admin object
+  } catch (err) {
+    await session.abortTransaction(); // ✅ ABORT ON ERROR
+    session.endSession();
+    throw err;
   }
 };
+
 export const UserService = {
   createUser,
   getSingleUser,

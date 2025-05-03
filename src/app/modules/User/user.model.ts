@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable no-useless-escape */
 // models/User.ts
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "./user.interface";
 import { validateEmail } from "./user.utils";
+import bycript from "bcryptjs";
+import config from "../../config";
 
 const userSchema: Schema<IUser> = new mongoose.Schema({
   name: {
@@ -30,9 +33,17 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     default: "user",
   },
   profilImage: { type: String },
-  rating: { type: Number, default: 0 },
 });
 
+userSchema.pre("save", async function (next) {
+  //   console.log(this, 'pre hook : we will save data');
+  const user = this;
+  user.password = await bycript.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 userSchema.post("save", function (doc, next) {
   //   console.log(this, 'post hook : we will save data');
   doc.password = "";
