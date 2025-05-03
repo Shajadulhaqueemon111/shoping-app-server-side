@@ -9,6 +9,7 @@ import {
   updateUserValidationSchema,
 } from "./user.validation";
 import validateRequest from "../../middlewares/validateRequiest";
+import { adminZodValidationSchema } from "../admin/admin.validation";
 
 const router = express.Router();
 
@@ -32,6 +33,11 @@ router.patch(
   UserController.updateUserById
 );
 
+router.post(
+  "/create-admin",
+  validateRequest(adminZodValidationSchema.createAdminValidationSchema),
+  UserController.createAdmin
+);
 // router.delete("/:id", auth(USER_ROLE.admin), UserController.deleteUserById);
 router.delete("/:id", UserController.deleteUserById);
 

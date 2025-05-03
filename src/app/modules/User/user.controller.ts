@@ -15,6 +15,17 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const createAdmin = catchAsync(async (req, res) => {
+  const { password, admin: adminData } = req.body;
+  const result = await UserService.createAdminIntoDB(password, adminData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Admin Created is successfully",
+    data: result,
+  });
+});
 const getSingleUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await UserService.getSingleUser(id);
@@ -68,4 +79,5 @@ export const UserController = {
   getAllUsers,
   updateUserById,
   deleteUserById,
+  createAdmin,
 };
