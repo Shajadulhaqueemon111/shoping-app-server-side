@@ -25,7 +25,7 @@ const metaSchema = z.object({
 });
 
 // Main Product Schema
-export const productValidationSchema = z.object({
+export const createProductValidationSchema = z.object({
   body: z.object({
     title: z.string().min(1),
     description: z.string().min(1),
@@ -52,7 +52,35 @@ export const productValidationSchema = z.object({
     thumbnail: z.string().url(),
   }),
 });
+export const updatedProductValidationSchema = z.object({
+  body: z.object({
+    title: z.string().min(1).optional(),
+    description: z.string().min(1).optional(),
+    category: z.enum(["beauty", "electronics", "fashion"]).optional(),
+    price: z.number().min(0).optional(),
+    discountPercentage: z.number().min(0).max(100).optional(),
+    rating: z.number().min(0).max(5).optional(),
+    stock: z.number().min(0).optional(),
+    tags: z.array(z.string()).optional(),
+    brand: z.string().min(1).optional(),
+    sku: z.string().min(1).optional(),
+    weight: z.number().min(0).optional(),
+    dimensions: dimensionsSchema,
+    warrantyInformation: z.string().optional(),
+    shippingInformation: z.string().optional(),
+    availabilityStatus: z
+      .enum(["In Stock", "Low Stock", "Out of Stock"])
+      .optional(),
+    reviews: z.array(reviewSchema).optional(),
+    returnPolicy: z.string().optional(),
+    minimumOrderQuantity: z.number().min(1).optional(),
+    meta: metaSchema,
+    images: z.array(z.string().url()).optional(),
+    thumbnail: z.string().url().optional(),
+  }),
+});
 
 export const productZodValidationSchema = {
-  productValidationSchema,
+  createProductValidationSchema,
+  updatedProductValidationSchema,
 };

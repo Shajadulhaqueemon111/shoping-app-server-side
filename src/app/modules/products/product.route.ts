@@ -7,12 +7,16 @@ const router = express.Router();
 //will coll controller function
 router.post(
   "/create-product",
-  validateRequest(productZodValidationSchema.productValidationSchema),
+  validateRequest(productZodValidationSchema.createProductValidationSchema),
   ProductController.createProduct
 );
 router.get("/", ProductController.getAllProducts);
 router.get("/:id", ProductController.findProductById);
-router.patch("/:id", ProductController.updateProductById);
+router.patch(
+  "/:id",
+  validateRequest(productZodValidationSchema.updatedProductValidationSchema),
+  ProductController.updateProductById
+);
 router.delete("/:id", ProductController.deleteProductById);
 
 export const productRouter = router;
