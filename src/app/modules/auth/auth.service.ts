@@ -1,13 +1,24 @@
 import config from "../../config";
+import AppError from "../../error/app.error";
 import { TLogin } from "./auth.interface";
 import { createToken } from "./auth.jwtUtils";
 import { checkPassword, validUserForLogin } from "./auth.utils";
-
+import httpStatus from "http-status";
 const LoginUser = async (payload: TLogin) => {
   const { password, id } = payload;
+  console.log(typeof id);
+  if (!id) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User ID cannot be undefined");
+  }
+  if (!password) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Password cannot be undefined");
+  }
   const user = await validUserForLogin(id);
-
-  await checkPassword(password, user.password);
+  console.log(user);
+  const isPasswordMatched = await checkPassword(password, user.password);
+  if (!isPasswordMatched) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Password is incorrect");
+  }
 
   const jwtPayload = {
     userId: user?.id,

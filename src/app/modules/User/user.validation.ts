@@ -9,7 +9,6 @@ export const createUserValidationSchema = z.object({
     }),
     role: z.enum(["admin", "user"]).optional(),
     profilImage: z.string(),
-    rating: z.number(),
   }),
 });
 
@@ -20,7 +19,6 @@ export const updateUserValidationSchema = z.object({
     password: z.string().optional(),
     role: z.enum(["admin", "user"]).optional(),
     profilImage: z.string().optional(),
-    rating: z.number().optional(),
   }),
 });
 

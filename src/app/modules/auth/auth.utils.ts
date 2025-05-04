@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 
 import bcrypt from "bcryptjs";
 export const validUserForLogin = async (id: string) => {
-  const user = await User.findOne({ id }).select("+password");
+  const user = await User.findById(id).select("+password");
 
   if (!user) {
     throw new AppError(httpStatus.BAD_REQUEST, "user in not found");
@@ -18,7 +18,7 @@ export const checkPassword = async (
   savePassword: string
 ) => {
   const isMatched = await bcrypt.compare(givenPassword, savePassword);
-
+  console.log(isMatched);
   if (!isMatched) {
     throw new AppError(httpStatus.FORBIDDEN, "password does not matched");
   }

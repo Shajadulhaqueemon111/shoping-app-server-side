@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import mongoose from "mongoose";
-import config from "../../config";
+
 import { TAdmin } from "../admin/admin.interface";
 import Admin from "../admin/admin.modle";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
-import bcryptJs from "bcryptjs";
+
 import AppError from "../../error/app.error";
 import httpStatus from "http-status";
-const createUser = async (user: IUser) => {
-  user.password = await bcryptJs.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds)
-  );
-  return await User.create(user);
+const createUser = async (payload: IUser) => {
+  const result = await User.create(payload);
+  return result;
 };
 
 const getSingleUser = async (userId: string) => {
