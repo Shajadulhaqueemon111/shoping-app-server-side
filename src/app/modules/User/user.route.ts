@@ -35,7 +35,7 @@ router.patch(
 
 router.post(
   "/create-admin",
-  authValidateRequest(USER_ROLE.admin),
+
   validateRequest(adminZodValidationSchema.createAdminValidationSchema),
   UserController.createAdmin
 );

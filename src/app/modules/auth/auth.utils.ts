@@ -3,8 +3,8 @@ import { User } from "../User/user.model";
 import httpStatus from "http-status";
 
 import bcrypt from "bcryptjs";
-export const validUserForLogin = async (id: string) => {
-  const user = await User.findById(id).select("+password");
+export const validUserForLogin = async (email: string) => {
+  const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     throw new AppError(httpStatus.BAD_REQUEST, "user in not found");

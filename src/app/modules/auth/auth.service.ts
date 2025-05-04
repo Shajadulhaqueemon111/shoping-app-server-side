@@ -5,15 +5,15 @@ import { createToken } from "./auth.jwtUtils";
 import { checkPassword, validUserForLogin } from "./auth.utils";
 import httpStatus from "http-status";
 const LoginUser = async (payload: TLogin) => {
-  const { password, id } = payload;
-  console.log(typeof id);
-  if (!id) {
+  const { password, email } = payload;
+  console.log(typeof email);
+  if (!email) {
     throw new AppError(httpStatus.BAD_REQUEST, "User ID cannot be undefined");
   }
   if (!password) {
     throw new AppError(httpStatus.BAD_REQUEST, "Password cannot be undefined");
   }
-  const user = await validUserForLogin(id);
+  const user = await validUserForLogin(email);
   console.log(user);
   const isPasswordMatched = await checkPassword(password, user.password);
   if (!isPasswordMatched) {
@@ -21,7 +21,7 @@ const LoginUser = async (payload: TLogin) => {
   }
 
   const jwtPayload = {
-    userId: user?.id,
+    userId: user?.email,
     role: user?.role,
   };
 
