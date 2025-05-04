@@ -9,7 +9,19 @@ import { User } from "./user.model";
 
 import AppError from "../../error/app.error";
 import httpStatus from "http-status";
-const createUser = async (payload: IUser) => {
+import { sendImageToCloudinary } from "../utils/sendImageToCloudinary";
+const createUser = async (payload: IUser, file: any) => {
+  if (!file) {
+    throw new AppError(httpStatus.BAD_REQUEST, "file does not uploaded");
+  }
+  const imageName = `${payload?.name}`;
+  const path = file?.path;
+  console.log(path);
+  //send image to cloudanary
+  const cloudinaryResponse = await sendImageToCloudinary(path, imageName);
+  console.log("Cloudinary Response:", cloudinaryResponse);
+  const { secure_url }: any = cloudinaryResponse;
+  payload.profilImage = secure_url;
   const result = await User.create(payload);
   return result;
 };
