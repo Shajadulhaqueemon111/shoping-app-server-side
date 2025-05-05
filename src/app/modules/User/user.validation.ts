@@ -8,7 +8,7 @@ export const createUserValidationSchema = z.object({
       required_error: "password is required",
     }),
     role: z.enum(["admin", "user"]).optional(),
-    profilImage: z.string(),
+    profilImage: z.string().optional(),
   }),
 });
 

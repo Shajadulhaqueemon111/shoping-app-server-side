@@ -8,8 +8,8 @@ import notFound from "./app/middlewares/notFound";
 
 app.use(express.json());
 app.use(cors());
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"] }));
 app.use("/api/v1", router);
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

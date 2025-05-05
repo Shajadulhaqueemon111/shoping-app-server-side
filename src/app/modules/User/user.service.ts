@@ -14,8 +14,12 @@ const createUser = async (payload: IUser, file: any) => {
   if (!file) {
     throw new AppError(httpStatus.BAD_REQUEST, "file does not uploaded");
   }
-  const imageName = `${payload?.name}`;
+  // const imageName = `${payload?.name}`;
+  const imageName = `${payload?.name.replace(/\s+/g, "-").toLowerCase()}-${Date.now()}`;
   const path = file?.path;
+  if (!path) {
+    throw new AppError(httpStatus.BAD_REQUEST, "File path is missing");
+  }
   console.log(path);
   //send image to cloudanary
   const cloudinaryResponse = await sendImageToCloudinary(path, imageName);
