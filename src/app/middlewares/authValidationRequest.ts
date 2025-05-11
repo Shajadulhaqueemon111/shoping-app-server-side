@@ -22,12 +22,12 @@ const authValidateRequest = (...requiredRoles: TUserRole[]) => {
       config.jwt_access_secret as string
     ) as JwtPayload;
     //access routing baced autorization function mean using ka ka route use korta parbe
-    const { role, userId } = decoded;
-    if (!userId || !role) {
+    const { role, email } = decoded;
+    if (!email || !role) {
       throw new AppError(httpStatus.UNAUTHORIZED, "Invalid Token Payload!");
     }
 
-    const user = await validUserForLogin(userId);
+    const user = await validUserForLogin(email);
 
     //password change time valid tokon comparizon
     // if (

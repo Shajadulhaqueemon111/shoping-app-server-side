@@ -22,8 +22,9 @@ const LoginUser = async (payload: TLogin) => {
   }
 
   const jwtPayload = {
-    userId: user?.email,
+    email: user?.email,
     role: user?.role,
+    profilImage: user.profilImage,
   };
 
   const accessToken = createToken(
@@ -74,17 +75,19 @@ const refreshToken = async (token: string) => {
   // }
 
   const jwtPayload = {
-    userId: user?.email,
+    email: user?.email,
     role: user?.role,
+    profilImage: user.profilImage,
   };
+  console.log("JWT Payload for Refresh Token:", jwtPayload);
 
-  const acessToken = createToken(
+  const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as unknown as number
   );
   return {
-    acessToken,
+    accessToken,
   };
 };
 
